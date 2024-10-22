@@ -200,7 +200,7 @@ echo -e "# Use current working directory" >> $file_name;
 echo -e "#$ -cwd" >> $file_name;
 echo -e "#" >> $file_name;
 echo -e "# Join stdout and stderr" >> $file_name;
-echo -e "#$ -j y" >> $file_name;
+echo -e "#$ -j yes" >> $file_name;
 echo -e "#" >> $file_name;
 echo -e "# Run job through bash shell" >> $file_name;
 echo -e "#$ -S /bin/bash" >> $file_name;
@@ -238,7 +238,7 @@ echo -e "mv -f info data/storage/$dir_name;" >> $file_name;
 echo -e "cd data/storage/$dir_name/info; mv dumps ..; cd ..; cd ..; cd ..; cd ..;" >> $file_name;
 
 #bash runSim.sh
-qsub gel.sge
+qsub runSim.sge
 
 cd ..;
 
