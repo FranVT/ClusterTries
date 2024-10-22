@@ -220,7 +220,7 @@ echo -e ". /etc/profile.d/modules.sh" >> $file_name;
 echo -e "# " >> $file_name;
 echo -e "# Add modules that you might require:" >> $file_name;
 echo -e "module load python37/3.7.6 " >> $file_name;
-echo -e "module load gcc?8.3.0" >> $file_name;
+echo -e "module load gcc/8.3.0" >> $file_name;
 echo -e "module load openmpi/gcc/64/1.10.1">> $file_name;
 echo -e "" >> $file_name;
 echo -e "rm -f -r info;" >> $file_name;
