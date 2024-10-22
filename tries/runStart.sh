@@ -190,26 +190,55 @@ cd ..; cd ..; cd ..;
 cd sim;
 
 # Create the execute bash script
-file_name="runSim.sh";
+file_name="runSim.sge";
+nodes=8;
+
 rm -f $file_name
 touch $file_name;
 echo -e "#!/bin/bash" >> $file_name;
+echo -e "# Use current working directory" >> $file_name;
+echo -e "#$ -cwd" >> $file_name;
+echo -e "#" >> $file_name;
+echo -e "# Join stdout and stderr" >> $file_name;
+echo -e "#$ -j y" >> $file_name;
+echo -e "#" >> $file_name;
+echo -e "# Run job through bash shell" >> $file_name;
+echo -e "#$ -S /bin/bash" >> $file_name;
+echo -e "# " >> $file_name;
+echo -e "# Set the number of nodes for parallel computation" >> $file_name;
+echo -e "#$ -pe mpich ${nodes}" >> $file_name;
+echo -e "# " >> $file_name;
+echo -e "# Job name" >> $file_name;
+echo -e "# -N Experiment_tries" >> $file_name;
+echo -e "# " >> $file_name;
+echo -e "# Send an email after the job has finished" >> $file_name;
+echo -e "# -m e" >> $file_name;
+echo -e "# -M vazqueztf@proton.me" >> $file_name;
+echo -e "# " >> $file_name;
+echo -e "# Modules neede" >> $file_name;
+echo -e ". /etc/profile.d/modules.sh" >> $file_name;
+echo -e "# " >> $file_name;
+echo -e "# Add modules that you might require:" >> $file_name;
+echo -e "module load python37/3.7.6 " >> $file_name;
+echo -e "module load gcc?8.3.0" >> $file_name;
+echo -e "module load openmpi/gcc/64/1.10.1">> $file_name;
 echo -e "" >> $file_name;
 echo -e "rm -f -r info;" >> $file_name;
 echo -e "mkdir info;" >> $file_name;
 echo -e "cd info; mkdir dumps; cd dumps;" >> $file_name;
 echo -e "mkdir assembly; mkdir shear; cd ..; cd ..;" >> $file_name;
 echo -e "" >> $file_name;
-#echo -e "env OMP_RUN_THREADS=1 mpirun -np 4 lmp -sf omp -in in.assembly.lmp -var temp $T -var damp $damp -var L $L -var NCL $N_CL -var NMO $N_MO -var seed1 $seed1 -var seed2 $seed2 -var seed3 $seed3 -var steps $steps -var tstep $tstep -var sstep $sstep -var Nave $Nave" >> $file_name;
+echo -e "mpirun -n ${nodes} /mnt/MD1200B/cferreiro/fbenavides/lammps-2Aug2023/src/lmp_mpi -in in.assembly.lmp -var temp $T -var damp $damp -var L $L -var NCL $N_CL -var NMO $N_MO -var seed1 $seed1 -var seed2 $seed2 -var seed3 $seed3 -var steps $steps -var tstep $tstep -var sstep $sstep -var Nave $Nave" >> $file_name;
 echo -e "" >> $file_name;
-echo -e "env OMP_RUN_THREADS=1 mpirun -np 4 lmp -sf omp -in in.shear.lmp -var temp $T -var damp $damp -var tstep $tstep_defor -var sstep $sstep_defor -var shear_rate $shear_rate -var max_strain $max_strain -var Nstep_per_strain $Nstep_per_strain -var shear_it $shear_it -var Nsave $Nsave -var seed3 $seed3 -var Nave $Nave -var rlxT1 $relaxTime1 -var rlxT2 $relaxTime2 -var rlxT3 $relaxTime3 -var rlxT4 $relaxTime4" >> $file_name;
+echo -e "mpirun -n ${nodes} /mnt/MD1200B/cferreiro/fbenavides/lammps-2Aug2023/src/lmp_mpi -in in.shear.lmp -var temp $T -var damp $damp -var tstep $tstep_defor -var sstep $sstep_defor -var shear_rate $shear_rate -var max_strain $max_strain -var Nstep_per_strain $Nstep_per_strain -var shear_it $shear_it -var Nsave $Nsave -var seed3 $seed3 -var Nave $Nave -var rlxT1 $relaxTime1 -var rlxT2 $relaxTime2 -var rlxT3 $relaxTime3 -var rlxT4 $relaxTime4" >> $file_name;
 echo -e "" >> $file_name;
 echo -e "cp -r info ..;" >> $file_name;
 echo -e "cd ..;" >> $file_name;
 echo -e "mv -f info data/storage/$dir_name;" >> $file_name;
 echo -e "cd data/storage/$dir_name/info; mv dumps ..; cd ..; cd ..; cd ..; cd ..;" >> $file_name;
 
-bash runSim.sh
+#bash runSim.sh
+qsub gel.sge
 
 cd ..;
 
