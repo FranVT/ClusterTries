@@ -1,38 +1,14 @@
 : '
-    Parameters for assembly and shear simualtions.
-    Script to run in LAVIS cluster.
+    Parameters for assembly and shear simualtions
 '
 
 #!/bin/bash
 
-# Use current working directory
-#$ -cwd
-#
-# Join stdout and stderr
-#$ -S /bin/bash
-#
-#Can eit following lines
-#
-#Name for the job
-#$ -N assemblyTries
-#
-# Send an email after te job has finished
-#$ -m e
-# -M vazqueztf@proton.me
-#
-# If modules are needed, sources modules enviroment
- /etc/profile.d/modules.sh
-#
-# Add any modules you might require
-module load python37/3.7.6
-module load gcc/8.3.0
-#
-# Wrtie commands:
 
 ## Start the for loop
 for var_cCL in 0.02; #0.06 0.1;
 do 
-for Nexp in 3; #$(seq 1 15);
+for Nexp in 9; #$(seq 1 15);
 do
 
 # Cifras significativas
@@ -47,7 +23,7 @@ r_Patch=0.4;
 phi=0.55;
 CL_concentration=$var_cCL; #0.1;
 N_particles=500;
-damp=10; #0.05;
+damp=1; #0.05;
 T=0.05;
 
 # Number of monomers and cross-linkers given concentration an total amount of patchy particles
@@ -87,11 +63,11 @@ seed2=4321;
 seed3=3124;
 
 ## Variables for shear deformation simulation
-tstep_defor=0.00001;
+tstep_defor=0.001;
 sstep_defor=10000;
 
 shear_rate=0.01;
-max_strain=12;
+max_strain=4;
 Nstep_per_strain=$(echo "scale=$cs; $(echo "scale=$cs; 1 / $shear_rate" | bc) * $(echo "scale=$cs; 1 / $tstep_defor" | bc)" | bc) ;
 Nstep_per_strain=${Nstep_per_strain%.*};
 
@@ -224,10 +200,9 @@ echo -e "mkdir info;" >> $file_name;
 echo -e "cd info; mkdir dumps; cd dumps;" >> $file_name;
 echo -e "mkdir assembly; mkdir shear; cd ..; cd ..;" >> $file_name;
 echo -e "" >> $file_name;
-echo -e "/mnt/MD1200B/cferreiro/fbenavides/lammps-2Aug2023/src/lmp_serial -in in.assembly.lmp -var temp $T -var damp $damp -var L $L -var NCL $N_CL -var NMO $N_MO -var seed1 $seed1 -var seed2 $seed2 -var seed3 $seed3 -var steps $steps -var tstep $tstep -var sstep $sstep -var Nave $Nave" >> $file_name;
 #echo -e "env OMP_RUN_THREADS=1 mpirun -np 4 lmp -sf omp -in in.assembly.lmp -var temp $T -var damp $damp -var L $L -var NCL $N_CL -var NMO $N_MO -var seed1 $seed1 -var seed2 $seed2 -var seed3 $seed3 -var steps $steps -var tstep $tstep -var sstep $sstep -var Nave $Nave" >> $file_name;
 echo -e "" >> $file_name;
-#echo -e "env OMP_RUN_THREADS=2 mpirun -np 8 lmp -sf omp -in in.deformationShear.lmp -var temp $T -var damp $damp -var tstep $tstep_defor -var sstep $sstep_defor -var shear_rate $shear_rate -var max_strain $max_strain -var Nstep_per_strain $Nstep_per_strain -var shear_it $shear_it -var Nsave $Nsave -var seed3 $seed3 -var Nave $Nave -var rlxT1 $relaxTime1 -var rlxT2 $relaxTime2 -var rlxT3 $relaxTime3 -var rlxT4 $relaxTime4" >> $file_name;
+echo -e "env OMP_RUN_THREADS=1 mpirun -np 4 lmp -sf omp -in in.shear.lmp -var temp $T -var damp $damp -var tstep $tstep_defor -var sstep $sstep_defor -var shear_rate $shear_rate -var max_strain $max_strain -var Nstep_per_strain $Nstep_per_strain -var shear_it $shear_it -var Nsave $Nsave -var seed3 $seed3 -var Nave $Nave -var rlxT1 $relaxTime1 -var rlxT2 $relaxTime2 -var rlxT3 $relaxTime3 -var rlxT4 $relaxTime4" >> $file_name;
 echo -e "" >> $file_name;
 echo -e "cp -r info ..;" >> $file_name;
 echo -e "cd ..;" >> $file_name;
