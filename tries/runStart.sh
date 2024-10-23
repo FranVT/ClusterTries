@@ -226,7 +226,7 @@ echo -e "module load gcc/8.3.0" >> $file_name;
 echo -e "module load openmpi/gcc/64/1.10.1">> $file_name;
 echo -e "" >> $file_name;
 echo -e "mkdir $info_name;" >> $file_name;
-echo -e "cd info; mkdir dumps; cd dumps;" >> $file_name;
+echo -e "cd $info_name; mkdir dumps; cd dumps;" >> $file_name;
 echo -e "mkdir assembly; mkdir shear; cd ..; cd ..;" >> $file_name;
 echo -e "" >> $file_name;
 echo -e "mpirun -n ${nodes} /mnt/MD1200B/cferreiro/fbenavides/lammps-2Aug2023/src/lmp_mpi -in in.assembly.lmp -var temp $T -var damp $damp -var L $L -var NCL $N_CL -var NMO $N_MO -var seed1 $seed1 -var seed2 $seed2 -var seed3 $seed3 -var steps $steps -var tstep $tstep -var sstep $sstep -var Nave $Nave" >> $file_name;
