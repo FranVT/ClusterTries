@@ -22,7 +22,7 @@ r_Patch=0.4;
 # Main parameters of the simulation
 phi=0.55;
 CL_concentration=$var_cCL; #0.1;
-N_particles=500;
+N_particles=100;
 damp=1; #0.05;
 T=0.05;
 
@@ -231,15 +231,15 @@ echo -e "mkdir assembly; mkdir shear; cd ..; cd ..;" >> $file_name;
 echo -e "" >> $file_name;
 echo -e "mpirun -n ${nodes} /mnt/MD1200B/cferreiro/fbenavides/lammps-2Aug2023/src/lmp_mpi -in in.assembly.lmp -var temp $T -var damp $damp -var L $L -var NCL $N_CL -var NMO $N_MO -var seed1 $seed1 -var seed2 $seed2 -var seed3 $seed3 -var steps $steps -var tstep $tstep -var sstep $sstep -var Nave $Nave" -var Dir $info_name>> $file_name;
 echo -e "" >> $file_name;
-echo -e "\n End of Assembly simulation, start of Deformation simulation \n"
+echo -e "echo -e "\n End of Assembly simulation, start of Deformation simulation \n"" >> $file_name
 echo -e "" >> $file_name;
 echo -e "mpirun -n ${nodes} /mnt/MD1200B/cferreiro/fbenavides/lammps-2Aug2023/src/lmp_mpi -in in.shear.lmp -var temp $T -var damp $damp -var tstep $tstep_defor -var sstep $sstep_defor -var shear_rate $shear_rate -var max_strain $max_strain -var Nstep_per_strain $Nstep_per_strain -var shear_it $shear_it -var Nsave $Nsave -var seed3 $seed3 -var Nave $Nave -var rlxT1 $relaxTime1 -var rlxT2 $relaxTime2 -var rlxT3 $relaxTime3 -var rlxT4 $relaxTime4" -var Dir $info_name>> $file_name;
 echo -e "" >> $file_name;
-echo -e "\n End of Deformation simulation \n"
+echo -e "echo -e "\n End of Deformation simulation \n"" >> $file_name
 echo -e "" >> $file_name;
-echo -e "cp -r $info_name ..;" >> $file_name;
+echo -e "mv -f $info_name ..;" >> $file_name;
 echo -e "cd ..;" >> $file_name;
-echo -e "mv -f $info_name data/storage/$dir_name;" >> $file_name;
+echo -e "mv -f $info_name data/storage/$dir_name/info;" >> $file_name;
 echo -e "cd data/storage/$dir_name/info; mv dumps ..; cd ..; cd ..; cd ..; cd ..;" >> $file_name;
 
 #bash runSim.sh
