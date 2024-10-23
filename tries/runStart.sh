@@ -191,9 +191,11 @@ cd sim;
 
 # Create the execute bash script
 file_name="runSim.sge";
+info_name=""infoPhi"${phi_aux}"T"${T_aux}"damp"${damp_aux}"cCL"${CL_con}"NPart"${N_particles}"ShearRate"${shear_aux}"RT1_"${rt1_aux}"RT2_"${rt2_aux}"RT3_"${rt3_aux}"RT4_"${rt4_aux}"Nexp"${Nexp}";
 nodes=8;
 
-rm -f $file_name
+rm -f $file_name;
+rm -f -r info*;
 touch $file_name;
 echo -e "#!/bin/bash" >> $file_name;
 echo -e "# Use current working directory" >> $file_name;
@@ -223,8 +225,7 @@ echo -e "module load python37/3.7.6 " >> $file_name;
 echo -e "module load gcc/8.3.0" >> $file_name;
 echo -e "module load openmpi/gcc/64/1.10.1">> $file_name;
 echo -e "" >> $file_name;
-echo -e "rm -f -r info;" >> $file_name;
-echo -e "mkdir info;" >> $file_name;
+echo -e "mkdir $info_name;" >> $file_name;
 echo -e "cd info; mkdir dumps; cd dumps;" >> $file_name;
 echo -e "mkdir assembly; mkdir shear; cd ..; cd ..;" >> $file_name;
 echo -e "" >> $file_name;
@@ -236,9 +237,9 @@ echo -e "mpirun -n ${nodes} /mnt/MD1200B/cferreiro/fbenavides/lammps-2Aug2023/sr
 echo -e "" >> $file_name;
 echo -e "\n End of Deformation simulation \n"
 echo -e "" >> $file_name;
-echo -e "cp -r info ..;" >> $file_name;
+echo -e "cp -r $info_name ..;" >> $file_name;
 echo -e "cd ..;" >> $file_name;
-echo -e "mv -f info data/storage/$dir_name;" >> $file_name;
+echo -e "mv -f $info_name data/storage/$dir_name;" >> $file_name;
 echo -e "cd data/storage/$dir_name/info; mv dumps ..; cd ..; cd ..; cd ..; cd ..;" >> $file_name;
 
 #bash runSim.sh
