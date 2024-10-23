@@ -26,7 +26,7 @@ group PA type 3
 group CM type 1 2
 
 # Fix rigid bodies
-fix rigiBodies all rigid/small/omp molecule
+fix rigiBodies all rigid/small molecule
 
 # Neighbor list
 neighbor 1.8 bin # extra-distance style

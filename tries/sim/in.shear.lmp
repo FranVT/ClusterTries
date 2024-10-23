@@ -9,7 +9,7 @@ boundary p p p
 # Styles of atoms and that stuff
 atom_style bond
 bond_style zero nocoeff
-pair_style hybrid/overlay/omp zero 0.0 lj/cut/omp 1.12 table/omp linear 5000000 threebody/table
+pair_style hybrid/overlay zero 0.0 lj/cut 1.12 table linear 5000000 threebody/table
 newton on
 
 read_data data.hydrogel extra/bond/per/atom 4 extra/special/per/atom 5
@@ -31,8 +31,8 @@ compute ep all pe
 compute ek all ke
 compute ekCM CM ke
 compute stressVirial all pressure t ke pair
-compute wcaPair all pair table/omp 1 epair
-compute patchPair all pair table/omp 2 epair
+compute wcaPair all pair lj/cut epair
+compute patchPair all pair table epair
 compute swapPair all pair threebody/table epair
 compute disc CM displace/atom
 compute daux CM chunk/atom type pbc yes
@@ -73,11 +73,11 @@ thermo ${sstep}
 # Brownian Dynamics using Langevin Thermostat
 
 # Set the time integrator
-fix VelVerlet all nve/omp # Use Velocity Verlet integrator
+fix VelVerlet all nve # Use Velocity Verlet integrator
 fix ThermoLng all langevin ${temp} ${temp} ${damp} 12345 # Brownian Dynamics: langevin + nve
 
 variable shearDirection equal xy
-variable maxTilt equal 0.25*lx
+variable maxTilt equal 0.5*lx
 variable restoreTilt equal -v_maxTilt
 variable shear_distance equal ${shear_rate}*lx*${tstep}
 
