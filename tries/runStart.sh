@@ -8,7 +8,7 @@
 ## Start the for loop
 for var_cCL in 0.02; #0.06 0.1;
 do 
-for Nexp in 9; #$(seq 1 15);
+for Nexp in $(seq 1 5);
 do
 
 # Cifras significativas
@@ -55,7 +55,7 @@ L_real=$(echo "scale=$cs; e( l($Vol_Tot)/3 )" | bc -l );
 L=$(echo "scale=$cs; $L_real / 2" | bc);
 
 # Numerical parameters for LAMMPS simulation
-steps=1000000;
+steps=6000000;
 tstep=0.001;
 sstep=500;
 seed1=1234;
