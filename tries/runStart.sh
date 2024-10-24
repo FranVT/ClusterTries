@@ -4,6 +4,14 @@
 
 #!/bin/bash
 
+# Clean the directory from previus simulations
+cd sim;
+
+rm -f *.po*;
+rm -f *.o*;
+rm -rf info*;
+
+cd ..;
 
 ## Start the for loop
 for var_cCL in 0.02; #0.06 0.1;
@@ -22,7 +30,7 @@ r_Patch=0.4;
 # Main parameters of the simulation
 phi=0.55;
 CL_concentration=$var_cCL; #0.1;
-N_particles=1500;
+N_particles=15;
 damp=1; #0.05;
 T=0.05;
 
@@ -190,12 +198,10 @@ cd ..; cd ..; cd ..;
 cd sim;
 
 # Create the execute bash script
-file_name="runSim.sge";
+file_name=""runSim_CL"${var_cCL}"N"${Nexp}".sge"";
 info_name=""infoPhi"${phi_aux}"T"${T_aux}"damp"${damp_aux}"cCL"${CL_con}"NPart"${N_particles}"ShearRate"${shear_aux}"RT1_"${rt1_aux}"RT2_"${rt2_aux}"RT3_"${rt3_aux}"RT4_"${rt4_aux}"Nexp"${Nexp}";
 nodes=8;
 
-rm -f $file_name;
-rm -f -r info*;
 touch $file_name;
 echo -e "#!/bin/bash" >> $file_name;
 echo -e "# Use current working directory" >> $file_name;
@@ -243,7 +249,7 @@ echo -e "mv -f $info_name data/storage/$dir_name/info;" >> $file_name;
 echo -e "cd data/storage/$dir_name/info; mv dumps ..; cd ..; cd ..; cd ..; cd ..;" >> $file_name;
 
 #bash runSim.sh
-qsub runSim.sge
+qsub $file_name 
 
 cd ..;
 
