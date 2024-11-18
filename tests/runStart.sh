@@ -7,6 +7,7 @@
 # Clean the directory from previus simulations
 cd sim;
 
+rm -f *.sge;
 rm -f *.po*;
 rm -f *.o*;
 rm -rf info*;
