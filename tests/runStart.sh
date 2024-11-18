@@ -15,11 +15,11 @@ rm -rf info*;
 cd ..;
 
 ## Start the for loop
-for var_shearRate in 0.01; #0.01 0.005 0.001;
+for var_shearRate in 0.01 0.005 0.001;
 do
 for var_cCL in 0.03; #0.06 0.1;
 do 
-for Nexp in 1; #$(seq 1 15);
+for Nexp in $(seq 1 15);
 do
 
 # Cifras significativas
@@ -38,7 +38,7 @@ r_Patch=0.2;
 # Main parameters of the simulation
 phi=0.55;
 CL_concentration=$var_cCL; #0.1;
-N_particles=50;
+N_particles=1500;
 damp=0.5; #0.05;
 T=0.05;
 
@@ -80,7 +80,7 @@ tstep_defor=0.001;
 sstep_defor=10000;
 
 shear_rate=$var_shearRate;
-max_strain=4;
+max_strain=6;
 Nstep_per_strain=$(echo "scale=$cs; $(echo "scale=$cs; 1 / $shear_rate" | bc) * $(echo "scale=$cs; 1 / $tstep_defor" | bc)" | bc) ;
 Nstep_per_strain=${Nstep_per_strain%.*};
 
@@ -88,7 +88,7 @@ shear_it=$(( $max_strain * $Nstep_per_strain));
 
 relaxTime1=$(( $max_strain * $Nstep_per_strain ));
 relaxTime2=$(( 2 * $relaxTime1)); 
-relaxTime3=$(( 1 * $relaxTime2));
+relaxTime3=$(( 4 * $relaxTime1));
 relaxTime4=$(( 1 * $Nstep_per_strain));
 
 # Parameters for fix and dumps files
