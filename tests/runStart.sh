@@ -19,7 +19,7 @@ for var_shearRate in 0.01 0.005 0.001;
 do
 for var_cCL in 0.03; #0.06 0.1;
 do 
-for Nexp in $(seq 1 15);
+for Nexp in $(seq 1 10);
 do
 
 # Cifras significativas
@@ -38,7 +38,7 @@ r_Patch=0.2;
 # Main parameters of the simulation
 phi=0.55;
 CL_concentration=$var_cCL; #0.1;
-N_particles=1500;
+N_particles=8000;
 damp=0.5; #0.05;
 T=0.05;
 
